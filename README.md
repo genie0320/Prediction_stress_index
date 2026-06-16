@@ -59,16 +59,17 @@ Predict stress index
 <br>
 ## Change log
 
-### v4 > Target MAE: MAE: 0.188906
+### v5 > MAE: 0.183198
+
+- [x] **GBDT 3대장 앙상블 체제 구축**: LightGBM 단일 모델에서 벗어나 XGBoost(`enable_categorical=True`, `tree_method='hist'`), CatBoost(`cat_features` 지정) 등 3대 GBDT 모델 동시 적용 및 개별 하이퍼파라미터 튜닝 환경 구축.
+- [x] **최종 모델 시드 앙상블 (Seed Averaging)**: 각 모델마다 서로 다른 3개 시드(`42`, `2026`, `777`)로 5-Fold 최종 학습을 진행하여 모델 분할 편향 제어.
+- [x] **SLSQP 기반 블렌딩 가중치 최적화**: 3대 모델의 OOF 예측값을 바탕으로 가중치의 합=1.0, 범위 [0, 1]의 수학적 제약 하에서 MAE가 최소화되는 결합 가중치 최적 산출.
+- [x] **Boundary Clipping 후처리**: 최종 예측 점수 범위를 목표 범위인 `[0.0, 1.0]` 내로 제한(`np.clip`)하여 예측 안정성 확보.
+
+### v4 > MAE: 0.188906
 
 - [x] **다차원 결측치 대치 Cascade**: `mean_working` 결측치 대치를 나이대+학력+활동량 3D 그룹 중앙값 우선 대치 및 Fallback 알고리즘으로 정밀화.
 - [x] **피처 가지치기 및 다중공선성 통제**: `Ponderal Index(PI)` 채택에 따른 중복 `bmi` 파생 변수 생략 및 중간 이진 플래그 일괄 제거.
-- [x] **GBDT 3대장 확장 및 라이브러리별 범주형 데이터 처리 안전망**:
-  - LightGBM, XGBoost(`enable_categorical=True`, `tree_method='hist'`), CatBoost(`cat_features` 지정) 개별 하이퍼파라미터 최적화.
-  - CatBoost OOM 방지를 위한 10회 탐색 제한 및 depth (4~6) 설정.
-- [x] **최종 모델 시드 앙상블 (Seed Averaging)**: 각 GBDT 모델마다 3개 시드(`42`, `2026`, `777`)로 5-Fold 최종 학습 후 평균화하여 분할 편향 제어.
-- [x] **SLSQP 기반 블렌딩 가중치 최적화**: 3대 모델의 OOF 성능을 기반으로 가중치 합=1.0, 범위 [0, 1]의 수학적 제약 조건 하에서 MAE가 최소화되는 결합 가중치 최적 산출.
-- **Boundary Clipping 후처리**: 최종 예측 범위를 `[0.0, 1.0]`으로 제한하여 안정성 확보.
 
 ### v3 > MAE: 0.184199
 
