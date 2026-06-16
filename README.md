@@ -59,6 +59,13 @@ Predict stress index
 <br>
 ## Change log
 
+### v6 > Target MAE: 0.182317
+
+- [x] **Data-Centric 파이프라인 전환**: 다중공선성 우려로 삭제했던 `height`, `weight`, `systolic_blood_pressure` 등 원본 수치형 데이터를 모두 보존하여 트리의 비선형적 상호작용 학습 극대화.
+- [x] **정밀 결측치 대치 (`IterativeImputer`)**: 8개의 수치형 건강 지표를 모두 동원하여 머신러닝 기반으로 `mean_working` 결측치 대치 (Data Leakage 방지를 위해 Train셋으로만 Fit).
+- [x] **SHAP 기반 하위 노이즈 제어**: LightGBM Baseline 학습 후 SHAP TreeExplainer 기여도를 산출, 최하위 3개 노이즈 피처 자동 제거를 통해 차원 팽창 방어.
+- [x] **Weights & Biases (W&B) 모니터링 연동**: `optuna_integration` 콜백을 통해 3개 GBDT 모델의 하이퍼파라미터 튜닝 시도(각 300회)와 MAE, MSE, RMSE, R2 등 보조 평가지표를 실시간 대시보드에 로깅.
+
 ### v5 > MAE: 0.183198
 
 - [x] **GBDT 3대장 앙상블 체제 구축**: LightGBM 단일 모델에서 벗어나 XGBoost(`enable_categorical=True`, `tree_method='hist'`), CatBoost(`cat_features` 지정) 등 3대 GBDT 모델 동시 적용 및 개별 하이퍼파라미터 튜닝 환경 구축.
