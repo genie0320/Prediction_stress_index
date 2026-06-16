@@ -4,21 +4,70 @@ Predict stress index
 
 ## 대회목적 ( 주최 : 데이콘 / 해커톤 )
 
+현대인들의 일상에 깊숙이 자리 잡은 스트레스는 신체적, 정신적 건강에 심각한 영향을 미치고 있으나, 많은 사람들이 자신의 스트레스 수준을 객관적으로 인식하지 못하고 있습니다. 이번 해커톤에서는 신체 정보, 수면 패턴 및 활동량 등 다양한 건강 데이터를 활용하여 개인의 스트레스 점수를 예측하는 AI 알고리즘 개발에 도전하게 됩니다.
+
+[주제]
+스트레스 점수 예측 AI 알고리즘 개발
+
 ## 대회규칙
+
+1. 평가 : MAE (Public에서 Test 데이터 100%를 활용)
+
+2. 참여 규칙
+   개인이나 팀으로 참여 가능
+
+3. 외부 데이터 및 사전 학습 모델
+   외부 데이터 사용 불가
+   사전 학습 모델(Pre-trained Model) 사용 가능
+
+4. 유의 사항
+
+- 1일 최대 제출 횟수: 3회
+- 모델 학습에서 평가 데이터셋 활용(Data Leakage)시 수상 제외
+  - label encoding, one-hot encoding 시 test 데이터 셋 활용
+  - data scaling 적용 시 test 데이터 셋 활용
+  - test 데이터 셋에 pd.get_dummies() 함수 적용
+  - test 데이터 셋의 결측치 처리 시 test 데이터 셋의 통계 값 활용
+- 위 예시 외에도 test 데이터 셋이 모델 학습에 활용되는 경우에 Data leakage에 해당됨
 
 ## 데이터구조
 
+- 특성 수 : 16
+- 전체 훈련 데이터셋 : 3000
+
+| Column Name              | Type    | Description            |
+| ------------------------ | ------- | ---------------------- |
+| ID                       | object  | 샘플별 고유 ID         |
+| gender                   | object  | 성별                   |
+| age                      | int64   | 연령                   |
+| height                   | float64 | 키(cm)                 |
+| weight                   | float64 | 몸무게(kg)             |
+| cholesterol              | float64 | 콜레스테롤 수치        |
+| systolic_blood_pressure  | int64   | 수축기 혈압            |
+| diastolic_blood_pressure | int64   | 이완기 혈압            |
+| glucose                  | float64 | 혈당 수치(mg/dL)       |
+| bone_density             | float64 | 골밀도(g/cm²)          |
+| activity                 | object  | 생활시 운동 강도       |
+| smoke_status             | object  | 흡연 상태              |
+| medical_history          | object  | 만성질환               |
+| family_medical_history   | object  | 가족력                 |
+| sleep_pattern            | object  | 수면패턴               |
+| edu_level                | float64 | 학력                   |
+| mean_working             | float64 | 1주일당 평균 근로 시간 |
+| stress_score (target)    | float64 | (TARGET) 스트레스 점수 |
+
+<br>
 ## Change log
 
 ### v4 > Target MAE: MAE: 0.188906
 
-- [ ] **다차원 결측치 대치 Cascade**: `mean_working` 결측치 대치를 나이대+학력+활동량 3D 그룹 중앙값 우선 대치 및 Fallback 알고리즘으로 정밀화.
-- [ ] **피처 가지치기 및 다중공선성 통제**: `Ponderal Index(PI)` 채택에 따른 중복 `bmi` 파생 변수 생략 및 중간 이진 플래그 일괄 제거.
-- [ ] **GBDT 3대장 확장 및 라이브러리별 범주형 데이터 처리 안전망**:
+- [x] **다차원 결측치 대치 Cascade**: `mean_working` 결측치 대치를 나이대+학력+활동량 3D 그룹 중앙값 우선 대치 및 Fallback 알고리즘으로 정밀화.
+- [x] **피처 가지치기 및 다중공선성 통제**: `Ponderal Index(PI)` 채택에 따른 중복 `bmi` 파생 변수 생략 및 중간 이진 플래그 일괄 제거.
+- [x] **GBDT 3대장 확장 및 라이브러리별 범주형 데이터 처리 안전망**:
   - LightGBM, XGBoost(`enable_categorical=True`, `tree_method='hist'`), CatBoost(`cat_features` 지정) 개별 하이퍼파라미터 최적화.
   - CatBoost OOM 방지를 위한 10회 탐색 제한 및 depth (4~6) 설정.
-- [ ] **최종 모델 시드 앙상블 (Seed Averaging)**: 각 GBDT 모델마다 3개 시드(`42`, `2026`, `777`)로 5-Fold 최종 학습 후 평균화하여 분할 편향 제어.
-- [ ] **SLSQP 기반 블렌딩 가중치 최적화**: 3대 모델의 OOF 성능을 기반으로 가중치 합=1.0, 범위 [0, 1]의 수학적 제약 조건 하에서 MAE가 최소화되는 결합 가중치 최적 산출.
+- [x] **최종 모델 시드 앙상블 (Seed Averaging)**: 각 GBDT 모델마다 3개 시드(`42`, `2026`, `777`)로 5-Fold 최종 학습 후 평균화하여 분할 편향 제어.
+- [x] **SLSQP 기반 블렌딩 가중치 최적화**: 3대 모델의 OOF 성능을 기반으로 가중치 합=1.0, 범위 [0, 1]의 수학적 제약 조건 하에서 MAE가 최소화되는 결합 가중치 최적 산출.
 - **Boundary Clipping 후처리**: 최종 예측 범위를 `[0.0, 1.0]`으로 제한하여 안정성 확보.
 
 ### v3 > MAE: 0.184199
