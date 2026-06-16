@@ -59,6 +59,15 @@ Predict stress index
 <br>
 ## Change log
 
+### v7 > Target MAE: 0.171128
+
+- [x] **모델 구조조정 (CatBoost 폐기)**: v6 앙상블 결과 가중치 0을 기록하며 자원만 소모하던 CatBoost를 최종 파이프라인에서 완전히 폐기하여 불필요한 연산 낭비 제거.
+- [x] **이종 앙상블(Dual-Track Heterogeneous) 아키텍처 도입**: 트리 모델(LightGBM, XGBoost)의 직교 분할 사각지대를 메우고 선형적 관계를 복합 학습하기 위해 선형 규제 모델인 **Ridge Regression**을 메인 모델로 강제 투입.
+- [x] **엄격한 Dual-Track 전처리 파이프라인 분리**:
+  - **Tree Track**: 범주형 데이터를 원본 범주형(`category` 타입) 그대로 사용하여 트리 분할 정보 보존.
+  - **Linear Track (Ridge)**: 선형 모델의 스케일 및 선형성 가정을 만족시키기 위해 K-Fold 내부 루프에서 `RobustScaler`(수치형)와 `OneHotEncoder`(범주형)를 적용하여 데이터 누수(Data Leakage)를 완벽히 통제한 정밀 전처리 구축.
+- [x] **튜닝 프로세스 개선**: XGBoost 파이프라인의 내부 전처리 최적화를 통해 단일 XGBoost의 OOF MAE를 기존 0.183에서 **0.171**로 대폭 하락시키는 성능 향상 확보.
+
 ### v6 > Target MAE: 0.182317
 
 - [x] **Data-Centric 파이프라인 전환**: 다중공선성 우려로 삭제했던 `height`, `weight`, `systolic_blood_pressure` 등 원본 수치형 데이터를 모두 보존하여 트리의 비선형적 상호작용 학습 극대화.
