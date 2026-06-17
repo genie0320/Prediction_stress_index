@@ -59,6 +59,12 @@ Predict stress index
 <br>
 ## Change log
 
+### v9 > Local MAE: 0.190593 (과소적합 발생 및 교훈)
+
+- [x] **과적합 방어를 위한 하드 제약(Regularization) 실험**: v8의 로컬-리더보드 점수 격차(0.167 vs 0.173)를 트리의 과적합으로 진단. 일반화 성능을 높이기 위해 `max_depth` (3~8) 및 `min_child_weight` (10~50)의 탐색 공간을 강제 축소하여 트리의 물리적 성장을 억제함.
+- [x] **기대효과 및 한계 (교훈)**: 미지의 데이터에 대한 안정성(Generalization)을 기대했으나, 규제가 지나치게 강해 오히려 복잡한 생체 피처 간의 상호작용을 모델이 전혀 학습하지 못하는 **극심한 과소적합(Underfitting)**이 발생함. 특히 Logit 변환된 타겟 공간의 극단값을 얕은 트리가 감당하지 못해 0.1905라는 점수 하락을 초래했으며, 이는 물리적 트리 제약 대신 손실함수(`gamma`)를 통한 정석적인 정규화(v10)로 전략을 선회하는 결정적 계기가 됨.
+- [x] **XGBoost 내부 버그 원천 우회**: Custom Eval Metric 사용 시 XGBoost 내부 래퍼에서 발생하는 `AttributeError('numpy.ndarray' object has no attribute 'get_label')` 에러를 우회. `eval_metric` 파라미터를 제거하고 Optuna의 `WeightsAndBiasesCallback`에 로깅을 온전히 위임하여 안정적인 튜닝 루프를 완성함.
+
 ### v8 > Local MAE: 0.167718 / Public MAE: 0.173078 >> 과적합???
 
 - [x] **앙상블 해체 및 XGBoost 단독 스페셜라이제이션**: v7 결과 가중치가 0으로 수렴했던 Ridge Regression 및 LightGBM을 배제하고, 압도적인 성능을 보인 단일 XGBoost 모델에 연산 및 튜닝 자원을 집중화.
