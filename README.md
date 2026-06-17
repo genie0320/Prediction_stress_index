@@ -59,6 +59,14 @@ Predict stress index
 <br>
 ## Change log
 
+### v8 > Local MAE: 0.167718 / Public MAE: 0.173078 >> 과적합???
+
+- [x] **앙상블 해체 및 XGBoost 단독 스페셜라이제이션**: v7 결과 가중치가 0으로 수렴했던 Ridge Regression 및 LightGBM을 배제하고, 압도적인 성능을 보인 단일 XGBoost 모델에 연산 및 튜닝 자원을 집중화.
+- [x] **Target Logit Transformation 도입**: Target 스트레스 점수(0~1)의 경계 오차(Boundary Error) 문제를 해결하기 위해 학습 데이터 타깃에 $\epsilon(10^{-5})$을 마스킹한 후 `scipy.special.logit`을 적용하여 무한 영역으로 변환 후 학습.
+- [x] **정밀 역변환 평가 파이프라인 수립**: Optuna 튜닝 및 Early Stopping의 성능 평가 지표를 Logit 영역이 아닌 원본 영역(Sigmoid/expit 복원)에서 MAE가 계산되도록 설계하여 실제 예측 대상과의 평가지표 정합성 확보.
+- [x] **XGBoost 탐색 공간 대폭 스케일업**: Optuna 튜닝 시도를 100회로 확장하고, `max_depth` (3~15), `learning_rate` (0.001~0.1) 등의 탐색 범위를 한계까지 열어 깊은 비선형 패턴 탐색.
+- [x] **분석**: 로컬 교차검증(OOF)에서는 **0.1677**로 사상 최저치 MAE를 기록하였으나, 리더보드 점수는 **0.1730**으로 다소 소폭 상승함. 이는 오직 XGBoost 단일 모델에 하이퍼-튜닝을 심하게 집중하면서 발생한 공분산 편향(Overfitting)과, Logit 변환의 아웃라이어 예측 증폭 현상(Sigmoid 복원 시 미세한 오차가 원래 스페이스에서 크게 작용)이 융합된 결과로 판단됨.
+
 ### v7 > Target MAE: 0.171128
 
 - [x] **모델 구조조정 (CatBoost 폐기)**: v6 앙상블 결과 가중치 0을 기록하며 자원만 소모하던 CatBoost를 최종 파이프라인에서 완전히 폐기하여 불필요한 연산 낭비 제거.
