@@ -3,6 +3,13 @@
 _*
 catboost_info/
 wandb/
+scratch/
+test.csv
+train.csv
+sample_submission.csv
+
+*.txt
+*.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
