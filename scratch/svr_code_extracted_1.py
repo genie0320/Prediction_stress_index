@@ -1,1 +1,0 @@
-Private 1ì, SVR ëª¨ë¸, No free lunch theorem
