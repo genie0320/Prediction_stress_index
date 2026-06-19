@@ -3,14 +3,10 @@ const isLocal = window.location.hostname === 'localhost' || window.location.host
 const API_BASE_URL = isLocal 
   ? 'http://localhost:7860' 
   : 'https://featherlike-stress-index-predictor.hf.space';
-let currentMode = 'lite'; // 'lite' or 'normal'
 
 /* ==========================================================================
    DOM Elements Selection
    ========================================================================== */
-const tabLite = document.getElementById('tab-lite');
-const tabNormal = document.getElementById('tab-normal');
-const bpFieldset = document.getElementById('bp-fieldset');
 const stressForm = document.getElementById('stress-form');
 const submitBtn = document.getElementById('submit-btn');
 
@@ -18,6 +14,8 @@ const submitBtn = document.getElementById('submit-btn');
 const ageInput = document.getElementById('age');
 const heightInput = document.getElementById('height');
 const weightInput = document.getElementById('weight');
+const useBpCheckbox = document.getElementById('use-bp-checkbox');
+const bpInputArea = document.getElementById('bp-input-area');
 const systolicInput = document.getElementById('systolic_blood_pressure');
 const diastolicInput = document.getElementById('diastolic_blood_pressure');
 
@@ -27,8 +25,7 @@ const loadingStatus = document.getElementById('loading-status');
 const progressBar = document.getElementById('progress-bar');
 const loadingHint = document.getElementById('loading-hint');
 
-// Modal Elements
-const resultDialog = document.getElementById('result-dialog');
+// Result Step Elements
 const resModelType = document.getElementById('res-model-type');
 const resGaugeFill = document.getElementById('res-gauge-fill');
 const resScorePct = document.getElementById('res-score-pct');
@@ -37,13 +34,18 @@ const resLevelBadge = document.getElementById('res-level-badge');
 const resDescription = document.getElementById('res-description');
 const resAction = document.getElementById('res-action');
 const resSupplement = document.getElementById('res-supplement');
+const resetBtn = document.getElementById('reset-btn');
+
+// Wizard elements
+const wizardWrapper = document.getElementById('wizard-wrapper');
+
+// Theme Switcher Buttons
+const themeLightBtn = document.getElementById('theme-light');
+const themeDarkBtn = document.getElementById('theme-dark');
 
 /* ==========================================================================
    Theme Switcher Logic (Apple Light/Dark Style)
    ========================================================================== */
-const themeLightBtn = document.getElementById('theme-light');
-const themeDarkBtn = document.getElementById('theme-dark');
-
 function applyTheme(theme) {
   if (theme === 'dark') {
     document.documentElement.classList.add('dark');
@@ -97,34 +99,63 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   Tab Swapping & Mode Toggle
+   Wizard Navigation & Step Control
    ========================================================================== */
-tabLite.addEventListener('click', () => setMode('lite'));
-tabNormal.addEventListener('click', () => setMode('normal'));
+let currentStep = 0;
 
-function setMode(mode) {
-  if (currentMode === mode) return;
-  currentMode = mode;
+function goToStep(step) {
+  currentStep = step;
+  wizardWrapper.style.transform = `translateX(-${currentStep * 100}%)`;
   
-  if (mode === 'lite') {
-    tabLite.classList.add('active');
-    tabNormal.classList.remove('active');
-    bpFieldset.classList.add('collapsed');
-    bpFieldset.disabled = true;
-    
-    // Clear validation states for BP inputs
-    clearError(systolicInput);
-    clearError(diastolicInput);
-  } else {
-    tabNormal.classList.add('active');
-    tabLite.classList.remove('active');
-    bpFieldset.classList.remove('collapsed');
-    bpFieldset.disabled = false;
+  // Set accessibility focus/attributes if needed
+  const activeStepCard = document.getElementById(`step-${step}`);
+  if (activeStepCard) {
+    activeStepCard.focus();
   }
 }
 
+// Setup data-next and data-prev click handlers
+document.querySelectorAll('[data-next]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const nextStep = parseInt(btn.getAttribute('data-next'));
+    // If going from Step 1 (Physical Info) to Step 2 (Lifestyle), validate first
+    if (currentStep === 1 && nextStep === 2) {
+      if (!validatePhysicalStep()) {
+        const firstInvalid = document.querySelector('#step-1 .input-group.invalid input');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+    }
+    goToStep(nextStep);
+  });
+});
+
+document.querySelectorAll('[data-prev]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const prevStep = parseInt(btn.getAttribute('data-prev'));
+    goToStep(prevStep);
+  });
+});
+
 /* ==========================================================================
-   Form Field Validations on Blur / Input
+   BP Checkbox Switch Control
+   ========================================================================== */
+useBpCheckbox.addEventListener('change', () => {
+  if (useBpCheckbox.checked) {
+    bpInputArea.classList.remove('collapsed');
+    systolicInput.disabled = false;
+    diastolicInput.disabled = false;
+  } else {
+    bpInputArea.classList.add('collapsed');
+    systolicInput.disabled = true;
+    diastolicInput.disabled = true;
+    clearError(systolicInput);
+    clearError(diastolicInput);
+  }
+});
+
+/* ==========================================================================
+   Form Field Validations
    ========================================================================== */
 const validationRules = {
   age: { min: 1, max: 120 },
@@ -152,29 +183,29 @@ function clearError(input) {
   if (parent) parent.classList.remove('invalid');
 }
 
-// Add event listeners for instant validation
+// Blur events
 ageInput.addEventListener('blur', () => validateField(ageInput, validationRules.age));
 heightInput.addEventListener('blur', () => validateField(heightInput, validationRules.height));
 weightInput.addEventListener('blur', () => validateField(weightInput, validationRules.weight));
 systolicInput.addEventListener('blur', () => {
-  if (!bpFieldset.disabled) validateField(systolicInput, validationRules.systolic);
+  if (useBpCheckbox.checked) validateField(systolicInput, validationRules.systolic);
 });
 diastolicInput.addEventListener('blur', () => {
-  if (!bpFieldset.disabled) validateField(diastolicInput, validationRules.diastolic);
+  if (useBpCheckbox.checked) validateField(diastolicInput, validationRules.diastolic);
 });
 
-// Clear invalid state while typing
+// Input events to clear visual error state
 [ageInput, heightInput, weightInput, systolicInput, diastolicInput].forEach(input => {
   input.addEventListener('input', () => clearError(input));
 });
 
-function validateForm() {
+function validatePhysicalStep() {
   let isValid = true;
   isValid &= validateField(ageInput, validationRules.age);
   isValid &= validateField(heightInput, validationRules.height);
   isValid &= validateField(weightInput, validationRules.weight);
   
-  if (currentMode === 'normal') {
+  if (useBpCheckbox.checked) {
     isValid &= validateField(systolicInput, validationRules.systolic);
     isValid &= validateField(diastolicInput, validationRules.diastolic);
   }
@@ -188,9 +219,10 @@ function validateForm() {
 stressForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   
-  if (!validateForm()) {
-    // Focus first invalid element
-    const firstInvalid = document.querySelector('.input-group.invalid input');
+  // Make sure Physical step info is valid (just in case they hacked steps)
+  if (!validatePhysicalStep()) {
+    goToStep(1);
+    const firstInvalid = document.querySelector('#step-1 .input-group.invalid input');
     if (firstInvalid) firstInvalid.focus();
     return;
   }
@@ -213,7 +245,8 @@ stressForm.addEventListener('submit', async (e) => {
     smoke_status: formData.get('smoke_status')
   };
   
-  if (currentMode === 'normal') {
+  // Check if BP checkbox is ticked, if so include BP params to route to Model A (With BP)
+  if (useBpCheckbox.checked) {
     dataPayload.systolic_blood_pressure = parseFloat(formData.get('systolic_blood_pressure'));
     dataPayload.diastolic_blood_pressure = parseFloat(formData.get('diastolic_blood_pressure'));
   }
@@ -279,7 +312,7 @@ stressForm.addEventListener('submit', async (e) => {
         if (apiError) {
           alert("모델 서버와의 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.\n(서버 Cold Start 상태일 수 있으니 10초 뒤 다시 측정해보세요!)");
         } else if (apiResponse && apiResponse.success) {
-          openResultModal(apiResponse);
+          showResultStep(apiResponse);
         } else {
           alert("예측 오류: " + (apiResponse ? apiResponse.message : "알 수 없는 오류"));
         }
@@ -297,9 +330,9 @@ stressForm.addEventListener('submit', async (e) => {
 });
 
 /* ==========================================================================
-   Modal Dialog Binding & Open
+   Result Step Binding & Presentation
    ========================================================================== */
-function openResultModal(data) {
+function showResultStep(data) {
   // 1. Model Type Badge
   resModelType.innerText = data.model_type;
   
@@ -336,26 +369,31 @@ function openResultModal(data) {
   resGaugeFill.style.strokeDashoffset = '264';
   setTimeout(() => {
     resGaugeFill.style.strokeDashoffset = offset.toString();
-  }, 100);
+  }, 150);
   
   // 6. Descriptions & Suggestions
   resDescription.innerText = data.description;
   resAction.innerText = data.action;
   resSupplement.innerText = data.supplement;
   
-  // 7. Show native modal dialog
-  resultDialog.showModal();
+  // 7. Transition to Step 3 (Results)
+  goToStep(3);
 }
 
-// Light dismiss: Close modal if backdrop is clicked
-resultDialog.addEventListener('click', (e) => {
-  const dialogDimensions = resultDialog.getBoundingClientRect();
-  if (
-    e.clientX < dialogDimensions.left ||
-    e.clientX > dialogDimensions.right ||
-    e.clientY < dialogDimensions.top ||
-    e.clientY > dialogDimensions.bottom
-  ) {
-    resultDialog.close();
-  }
+/* ==========================================================================
+   Reset / Measure Again Action
+   ========================================================================== */
+resetBtn.addEventListener('click', () => {
+  stressForm.reset();
+  
+  // Explicitly ensure BP inputs are collapsed and disabled
+  bpInputArea.classList.add('collapsed');
+  systolicInput.disabled = true;
+  diastolicInput.disabled = true;
+  
+  // Clear any validation visual states
+  [ageInput, heightInput, weightInput, systolicInput, diastolicInput].forEach(clearError);
+  
+  // Go back to intro
+  goToStep(0);
 });

@@ -41,174 +41,288 @@
       </div>
     </div>
 
-    <section class="card">
-      <!-- Mode Toggle tabs -->
-      <div class="mode-tabs">
-        <button type="button" class="tab-btn active" id="tab-lite" data-mode="lite">
-          <span class="icon">⚡</span>
-          <span class="label">라이트 측정</span>
-          <span class="desc">혈압 입력 없이 빠르게</span>
-        </button>
-        <button type="button" class="tab-btn" id="tab-normal" data-mode="normal">
-          <span class="icon">⌚</span>
-          <span class="label">노멀 측정</span>
-          <span class="desc">스마트워치 혈압 연동</span>
-        </button>
-      </div>
-
+    <!-- Onboarding Wizard Card -->
+    <section class="card wizard-container">
       <form id="stress-form" novalidate>
-        <fieldset class="form-section">
-          <legend class="sr-only">신체 정보 입력</legend>
+        <div class="wizard-wrapper" id="wizard-wrapper">
           
-          <div class="form-row">
-            <!-- Age input -->
-            <div class="input-group">
-              <label for="age">나이 (세)</label>
-              <input type="number" id="age" name="age" min="1" max="120" value="30" required>
-              <span class="error-msg" id="age-error">올바른 나이를 입력하세요.</span>
-            </div>
-
-            <!-- Height input -->
-            <div class="input-group">
-              <label for="height">키 (cm)</label>
-              <input type="number" id="height" name="height" min="50" max="250" step="0.1" value="170" required>
-              <span class="error-msg" id="height-error">올바른 키를 입력하세요.</span>
-            </div>
-
-            <!-- Weight input -->
-            <div class="input-group">
-              <label for="weight">몸무게 (kg)</label>
-              <input type="number" id="weight" name="weight" min="10" max="300" step="0.1" value="65" required>
-              <span class="error-msg" id="weight-error">올바른 몸무게를 입력하세요.</span>
-            </div>
-          </div>
-
-          <!-- Gender radio group -->
-          <div class="input-group radio-group">
-            <span class="group-label">성별</span>
-            <div class="radio-options">
-              <label class="radio-card">
-                <input type="radio" name="gender" value="M" checked>
-                <span class="radio-content">남성 (Male)</span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="gender" value="F">
-                <span class="radio-content">여성 (Female)</span>
-              </label>
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- Dynamic Blood Pressure Fields for Normal Mode -->
-        <fieldset class="form-section expandable collapsed" id="bp-fieldset" disabled>
-          <legend class="section-title">혈압 수치 입력</legend>
-          <div class="form-row">
-            <!-- Systolic BP input -->
-            <div class="input-group">
-              <label for="systolic_blood_pressure">수축기 혈압 (mmHg) <span class="hint">최고 혈압</span></label>
-              <input type="number" id="systolic_blood_pressure" name="systolic_blood_pressure" min="50" max="250" value="120">
-              <span class="error-msg" id="systolic-error">최고 혈압을 입력하세요.</span>
-            </div>
-
-            <!-- Diastolic BP input -->
-            <div class="input-group">
-              <label for="diastolic_blood_pressure">이완기 혈압 (mmHg) <span class="hint">최저 혈압</span></label>
-              <input type="number" id="diastolic_blood_pressure" name="diastolic_blood_pressure" min="30" max="200" value="80">
-              <span class="error-msg" id="diastolic-error">최저 혈압을 입력하세요.</span>
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset class="form-section">
-          <legend class="section-title">생활 습관 및 환경</legend>
-
-          <!-- Sleep Pattern radio group -->
-          <div class="input-group radio-group">
-            <span class="group-label">수면 패턴</span>
-            <div class="radio-options col-3">
-              <label class="radio-card">
-                <input type="radio" name="sleep_pattern" value="sleep difficulty">
-                <span class="radio-content">
-                  <span class="title">불면/수면 부족</span>
-                  <span class="desc">잠들기 어렵거나 자주 깸</span>
-                </span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="sleep_pattern" value="normal" checked>
-                <span class="radio-content">
-                  <span class="title">정상 수면</span>
-                  <span class="desc">개운하고 규칙적인 수면</span>
-                </span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="sleep_pattern" value="oversleeping">
-                <span class="radio-content">
-                  <span class="title">과다 수면</span>
-                  <span class="desc">지나치게 많이 잠</span>
-                </span>
-              </label>
+          <!-- 스텝 0: 소개 카드 (Intro) -->
+          <div class="step-card" id="step-0">
+            <div class="step-content intro-step">
+              <span class="step-indicator">WELCOME</span>
+              <h2>스트레스 측정 시작</h2>
+              <p class="intro-p">
+                일상의 피로와 건강 신호들을 입력하여 인공지능 모델 기반의 정밀 스트레스 상태 분석을 받아보세요.
+              </p>
+              <div class="features-list">
+                <div class="feature-item">
+                  <span class="icon">📊</span>
+                  <div class="f-text">
+                    <strong>검증된 예측 성능</strong>
+                    <p>6,000명의 교차검증 결합 데이터를 학습한 고성능 SVR 모델 탑재</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="icon">⚡</span>
+                  <div class="f-text">
+                    <strong>스마트 분석 (선택사항)</strong>
+                    <p>스마트워치 등으로 측정한 혈압 수치를 더해 정밀도 극대화</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="icon">🧘</span>
+                  <div class="f-text">
+                    <strong>맞춤형 가이드라인</strong>
+                    <p>스트레스 지수에 특화된 보조 식품 및 맞춤행동 처방 가이드 제공</p>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="submit-btn next-btn" data-next="1">
+                <span>스트레스 측정 시작하기</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon"><line x1="5" y1="12" x2="19" y2="12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
             </div>
           </div>
 
-          <!-- Activity Level radio group -->
-          <div class="input-group radio-group">
-            <span class="group-label">평소 운동 강도</span>
-            <div class="radio-options col-3">
-              <label class="radio-card">
-                <input type="radio" name="activity" value="light">
-                <span class="radio-content">
-                  <span class="title">가벼운 활동</span>
-                  <span class="desc">주로 앉아있음, 산책 등</span>
-                </span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="activity" value="moderate" checked>
-                <span class="radio-content">
-                  <span class="title">보통 활동</span>
-                  <span class="desc">적당한 걷기, 주 2-3회 운동</span>
-                </span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="activity" value="intense">
-                <span class="radio-content">
-                  <span class="title">고강도 운동</span>
-                  <span class="desc">매일 격렬한 피트니스, 트레이닝</span>
-                </span>
-              </label>
+          <!-- 스텝 1: 신체 정보 카드 (Physical Info) -->
+          <div class="step-card" id="step-1">
+            <div class="step-content">
+              <span class="step-indicator">STEP 1 / 2</span>
+              <h2>신체 정보 입력</h2>
+              <fieldset class="form-section-wizard">
+                <legend class="sr-only">기본 신체정보</legend>
+                
+                <div class="form-row">
+                  <!-- Age input -->
+                  <div class="input-group">
+                    <label for="age">나이 (세)</label>
+                    <input type="number" id="age" name="age" min="1" max="120" value="30" required>
+                    <span class="error-msg" id="age-error">올바른 나이를 입력하세요.</span>
+                  </div>
+
+                  <!-- Height input -->
+                  <div class="input-group">
+                    <label for="height">키 (cm)</label>
+                    <input type="number" id="height" name="height" min="50" max="250" step="0.1" value="170" required>
+                    <span class="error-msg" id="height-error">올바른 키를 입력하세요.</span>
+                  </div>
+
+                  <!-- Weight input -->
+                  <div class="input-group">
+                    <label for="weight">몸무게 (kg)</label>
+                    <input type="number" id="weight" name="weight" min="10" max="300" step="0.1" value="65" required>
+                    <span class="error-msg" id="weight-error">올바른 몸무게를 입력하세요.</span>
+                  </div>
+                </div>
+
+                <!-- Gender radio group -->
+                <div class="input-group radio-group">
+                  <span class="group-label">성별</span>
+                  <div class="radio-options">
+                    <label class="radio-card">
+                      <input type="radio" name="gender" value="M" checked>
+                      <span class="radio-content">남성 (Male)</span>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="gender" value="F">
+                      <span class="radio-content">여성 (Female)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- BP Checkbox Switch -->
+                <div class="checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="use-bp-checkbox" name="use_bp">
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-text">혈압 수치 추가 입력하기 <span class="badge-recommend">정확도 향상 ⚡</span></span>
+                  </label>
+                  <p class="checkbox-hint">스마트워치나 혈압계로 측정한 최근 수축기/이완기 혈압을 입력하시면 정확도가 높아집니다.</p>
+                </div>
+
+                <!-- Collapsible BP Inputs -->
+                <div class="bp-input-area collapsed" id="bp-input-area">
+                  <div class="form-row">
+                    <!-- Systolic BP input -->
+                    <div class="input-group">
+                      <label for="systolic_blood_pressure">수축기 최고혈압 (mmHg)</label>
+                      <input type="number" id="systolic_blood_pressure" name="systolic_blood_pressure" min="50" max="250" value="120" disabled>
+                      <span class="error-msg" id="systolic-error">최고 혈압을 입력하세요.</span>
+                    </div>
+
+                    <!-- Diastolic BP input -->
+                    <div class="input-group">
+                      <label for="diastolic_blood_pressure">이완기 최저혈압 (mmHg)</label>
+                      <input type="number" id="diastolic_blood_pressure" name="diastolic_blood_pressure" min="30" max="200" value="80" disabled>
+                      <span class="error-msg" id="diastolic-error">최저 혈압을 입력하세요.</span>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="wizard-nav">
+                <button type="button" class="btn-prev" data-prev="0">이전</button>
+                <button type="button" class="btn-next" data-next="2">다음 단계</button>
+              </div>
             </div>
           </div>
 
-          <!-- Smoke Status radio group -->
-          <div class="input-group radio-group">
-            <span class="group-label">흡연 여부</span>
-            <div class="radio-options col-3">
-              <label class="radio-card">
-                <input type="radio" name="smoke_status" value="non-smoker" checked>
-                <span class="radio-content">비흡연자</span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="smoke_status" value="ex-smoker">
-                <span class="radio-content">금연 중</span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="smoke_status" value="current-smoker">
-                <span class="radio-content">흡연 중</span>
-              </label>
+          <!-- 스텝 2: 생활 습관 카드 (Lifestyle Info) -->
+          <div class="step-card" id="step-2">
+            <div class="step-content">
+              <span class="step-indicator">STEP 2 / 2</span>
+              <h2>생활 습관 및 환경</h2>
+              <fieldset class="form-section-wizard">
+                <legend class="sr-only">생활패턴 및 습관</legend>
+
+                <!-- Sleep Pattern radio group -->
+                <div class="input-group radio-group">
+                  <span class="group-label">수면 패턴</span>
+                  <div class="radio-options col-3">
+                    <label class="radio-card">
+                      <input type="radio" name="sleep_pattern" value="sleep difficulty">
+                      <span class="radio-content">
+                        <span class="title">불면/수면 부족</span>
+                        <span class="desc">잠들기 어렵거나 자주 깸</span>
+                      </span>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="sleep_pattern" value="normal" checked>
+                      <span class="radio-content">
+                        <span class="title">정상 수면</span>
+                        <span class="desc">개운하고 규칙적인 수면</span>
+                      </span>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="sleep_pattern" value="oversleeping">
+                      <span class="radio-content">
+                        <span class="title">과다 수면</span>
+                        <span class="desc">지나치게 많이 잠</span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Activity Level radio group -->
+                <div class="input-group radio-group">
+                  <span class="group-label">평소 운동 강도</span>
+                  <div class="radio-options col-3">
+                    <label class="radio-card">
+                      <input type="radio" name="activity" value="light">
+                      <span class="radio-content">
+                        <span class="title">가벼운 활동</span>
+                        <span class="desc">주로 앉아있음, 산책 등</span>
+                      </span>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="activity" value="moderate" checked>
+                      <span class="radio-content">
+                        <span class="title">보통 활동</span>
+                        <span class="desc">적당한 걷기, 주 2-3회 운동</span>
+                      </span>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="activity" value="intense">
+                      <span class="radio-content">
+                        <span class="title">고강도 운동</span>
+                        <span class="desc">매일 격렬한 운동, 트레이닝</span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Smoke Status radio group -->
+                <div class="input-group radio-group">
+                  <span class="group-label">흡연 여부</span>
+                  <div class="radio-options col-3">
+                    <label class="radio-card">
+                      <input type="radio" name="smoke_status" value="non-smoker" checked>
+                      <span class="radio-content">비흡연자</span>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="smoke_status" value="ex-smoker">
+                      <span class="radio-content">금연 중</span>
+                    </label>
+                    <label class="radio-card">
+                      <input type="radio" name="smoke_status" value="current-smoker">
+                      <span class="radio-content">흡연 중</span>
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="wizard-nav">
+                <button type="button" class="btn-prev" data-prev="1">이전</button>
+                <button type="submit" class="submit-btn" id="submit-btn">
+                  <span>스트레스 측정 시작</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon"><line x1="5" y1="12" x2="19" y2="12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+              </div>
             </div>
           </div>
-        </fieldset>
 
-        <button type="submit" class="submit-btn" id="submit-btn">
-          <span>스트레스 측정 시작</span>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon"><line x1="5" y1="12" x2="19" y2="12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </button>
+          <!-- 스텝 3: 결과 안내 카드 (Results Page) -->
+          <div class="step-card" id="step-3">
+            <div class="step-content result-step-content">
+              <div class="result-header">
+                <h2>스트레스 측정 결과</h2>
+                <span class="model-badge" id="res-model-type">Normal Mode</span>
+              </div>
+
+              <div class="result-body">
+                <div class="result-visual">
+                  <div class="gauge-container">
+                    <svg class="gauge-svg" viewBox="0 0 100 100">
+                      <circle class="gauge-bg" cx="50" cy="50" r="42"></circle>
+                      <circle class="gauge-fill" id="res-gauge-fill" cx="50" cy="50" r="42"></circle>
+                    </svg>
+                    <div class="gauge-overlay">
+                      <span class="gauge-num" id="res-score-pct">0.0%</span>
+                      <span class="gauge-rank" id="res-rank">상위 0.0%</span>
+                    </div>
+                  </div>
+                  <div class="level-badge" id="res-level-badge">보통</div>
+                </div>
+
+                <p class="result-description" id="res-description">
+                  지극히 정상적이고 일상적인 스트레스 수준입니다. 적절한 휴식이 필요합니다.
+                </p>
+
+                <div class="suggestion-section">
+                  <!-- Recommended action card -->
+                  <div class="suggestion-card">
+                    <div class="card-header">
+                      <span class="icon">🧘</span>
+                      <h4>권장 행동 가이드</h4>
+                    </div>
+                    <p id="res-action">규칙적인 수면과 함께 가벼운 운동으로 피로를 해소해보세요.</p>
+                  </div>
+
+                  <!-- Recommended supplement card -->
+                  <div class="suggestion-card">
+                    <div class="card-header">
+                      <span class="icon">💊</span>
+                      <h4>도움이 되는 보조 식품</h4>
+                    </div>
+                    <p id="res-supplement">비타민 B 복합체나 홍경천 추출물</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-footer">
+                <button type="button" class="confirm-btn" id="reset-btn">다시 측정하기</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </form>
     </section>
   </main>
 
   <!-- Loading Overlay -->
   <div class="loading-overlay hidden" id="loading-overlay">
-    <div class="loading-content glass">
+    <div class="loading-content">
       <div class="spinner-container">
         <div class="pulse-ring"></div>
         <div class="pulse-icon">🧠</div>
@@ -222,64 +336,6 @@
       </p>
     </div>
   </div>
-
-  <!-- Result Dialog (Native Modal) -->
-  <dialog class="result-dialog glass" id="result-dialog">
-    <form method="dialog" class="dialog-form">
-      <button type="submit" class="close-btn" aria-label="닫기">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="close-icon"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-
-      <div class="result-header">
-        <h2>스트레스 측정 결과</h2>
-        <span class="model-badge" id="res-model-type">Normal Mode</span>
-      </div>
-
-      <div class="result-body">
-        <div class="result-visual">
-          <div class="gauge-container">
-            <svg class="gauge-svg" viewBox="0 0 100 100">
-              <circle class="gauge-bg" cx="50" cy="50" r="42"></circle>
-              <circle class="gauge-fill" id="res-gauge-fill" cx="50" cy="50" r="42"></circle>
-            </svg>
-            <div class="gauge-overlay">
-              <span class="gauge-num" id="res-score-pct">0.0%</span>
-              <span class="gauge-rank" id="res-rank">상위 0.0%</span>
-            </div>
-          </div>
-          <div class="level-badge" id="res-level-badge">보통</div>
-        </div>
-
-        <p class="result-description" id="res-description">
-          지극히 정상적이고 일상적인 스트레스 수준입니다. 적절한 휴식이 필요합니다.
-        </p>
-
-        <div class="suggestion-section">
-          <!-- Recommended action card -->
-          <div class="suggestion-card">
-            <div class="card-header">
-              <span class="icon">🧘</span>
-              <h4>권장 행동 가이드</h4>
-            </div>
-            <p id="res-action">규칙적인 수면과 함께 가벼운 운동으로 피로를 해소해보세요.</p>
-          </div>
-
-          <!-- Recommended supplement card -->
-          <div class="suggestion-card">
-            <div class="card-header">
-              <span class="icon">💊</span>
-              <h4>도움이 되는 보조 식품</h4>
-            </div>
-            <p id="res-supplement">비타민 B 복합체나 홍경천 추출물</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="result-footer">
-        <button type="submit" class="confirm-btn">확인 및 닫기</button>
-      </div>
-    </form>
-  </dialog>
 
   <script src="static/js/app.js"></script>
 </body>
