@@ -57,6 +57,9 @@ Predict stress index
 | stress_score (target)    | float64 | (TARGET) 스트레스 점수 |
 
 <br>
-## Change log for Web service
 
-## [Change log for Modeling](Docs/Change_log_for_Modeling.md)
+## Change log
+
+### for Web service
+
+### [for Modeling](Docs/Change_log_for_Modeling.md)
