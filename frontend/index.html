@@ -17,15 +17,31 @@
   </div>
 
   <main class="app-container">
-    <header class="app-header">
-      <div class="logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+    <div class="sidebar">
+      <header class="app-header">
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        </div>
+        <h1>Stress Index Lab</h1>
+        <p class="subtitle">AI 기반 개인 맞춤형 스트레스 지수 분석기</p>
+      </header>
+      <p class="sidebar-desc">
+        당신의 신체 정보, 혈압 변동성 및 생활 습관 데이터를 바탕으로 AI 모델이 스트레스 지수를 과학적으로 분석하여 최적의 웰니스 솔루션을 제공합니다.
+      </p>
+      <!-- Apple-style Theme Switcher -->
+      <div class="theme-switcher">
+        <button type="button" class="theme-btn" id="theme-light" aria-label="라이트 모드">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <span>Light</span>
+        </button>
+        <button type="button" class="theme-btn" id="theme-dark" aria-label="다크 모드">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <span>Dark</span>
+        </button>
       </div>
-      <h1>Stress Index Lab</h1>
-      <p class="subtitle">AI 기반 개인 맞춤형 스트레스 지수 분석기</p>
-    </header>
+    </div>
 
-    <section class="card glass">
+    <section class="card">
       <!-- Mode Toggle tabs -->
       <div class="mode-tabs">
         <button type="button" class="tab-btn active" id="tab-lite" data-mode="lite">

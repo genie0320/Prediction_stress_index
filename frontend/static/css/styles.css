@@ -141,6 +141,55 @@ body {
   transition: max-width 0.3s ease;
 }
 
+/* Sidebar default (mobile/tablet) */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.sidebar-desc {
+  display: none; /* Hide on mobile/tablet */
+}
+
+/* Apple-style Theme Switcher */
+.theme-switcher {
+  display: inline-flex;
+  background-color: var(--segmented-bg);
+  padding: 3px;
+  border-radius: 9px;
+  width: fit-content;
+  transition: background-color 0.3s ease;
+}
+
+.theme-btn {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 7px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-family);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+}
+
+.theme-btn:hover {
+  color: var(--text-primary);
+}
+
+.theme-btn.active {
+  background-color: var(--segmented-thumb);
+  color: var(--segmented-text-active);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
 .app-header {
   text-align: center;
 }
@@ -855,23 +904,50 @@ input[type="number"]:focus {
   }
 
   .app-container {
-    max-width: 900px; /* Slightly wider for 2-column layout */
-    gap: 1.25rem;
+    max-width: 1000px; /* Wider for sidebar grid */
+    display: grid;
+    grid-template-columns: 1fr 1.65fr;
+    gap: 3.5rem;
+    align-items: start;
   }
 
-  .app-header .logo {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 0.5rem;
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    text-align: left;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .sidebar .app-header {
+    text-align: left;
+  }
+
+  .sidebar .app-header .logo {
+    margin-bottom: 1rem;
   }
   
-  .app-header .logo svg {
+  .sidebar .app-header .logo svg {
     width: 24px;
     height: 24px;
   }
 
-  .app-header h1 {
+  .sidebar .app-header h1 {
     font-size: 2rem;
+  }
+
+  .sidebar-desc {
+    display: block; /* Show on desktop */
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  .theme-switcher {
+    margin-top: 0.5rem;
   }
 
   .card {

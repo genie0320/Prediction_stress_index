@@ -39,6 +39,53 @@ const resAction = document.getElementById('res-action');
 const resSupplement = document.getElementById('res-supplement');
 
 /* ==========================================================================
+   Theme Switcher Logic (Apple Light/Dark Style)
+   ========================================================================== */
+const themeLightBtn = document.getElementById('theme-light');
+const themeDarkBtn = document.getElementById('theme-dark');
+
+function applyTheme(theme) {
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('light');
+    themeDarkBtn.classList.add('active');
+    themeLightBtn.classList.remove('active');
+  } else {
+    document.documentElement.classList.add('light');
+    document.documentElement.classList.remove('dark');
+    themeLightBtn.classList.add('active');
+    themeDarkBtn.classList.remove('active');
+  }
+}
+
+themeLightBtn.addEventListener('click', () => {
+  applyTheme('light');
+  localStorage.setItem('theme', 'light');
+});
+
+themeDarkBtn.addEventListener('click', () => {
+  applyTheme('dark');
+  localStorage.setItem('theme', 'dark');
+});
+
+// Initialize theme
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+  applyTheme(savedTheme);
+} else {
+  // Sync with system preference by default
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(systemPrefersDark ? 'dark' : 'light');
+}
+
+// Listen to system preference changes dynamically
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (!localStorage.getItem('theme')) {
+    applyTheme(e.matches ? 'dark' : 'light');
+  }
+});
+
+/* ==========================================================================
    CORS Warm-up Ping (Cold Start Mitigation)
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
