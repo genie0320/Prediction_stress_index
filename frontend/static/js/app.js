@@ -102,6 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
    Wizard Navigation & Step Control
    ========================================================================== */
 let currentStep = 0;
+let lastResult = null;
 
 function goToStep(step) {
   currentStep = step;
@@ -312,6 +313,7 @@ stressForm.addEventListener('submit', async (e) => {
         if (apiError) {
           alert("모델 서버와의 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.\n(서버 Cold Start 상태일 수 있으니 10초 뒤 다시 측정해보세요!)");
         } else if (apiResponse && apiResponse.success) {
+          lastResult = apiResponse;
           showResultStep(apiResponse);
         } else {
           alert("예측 오류: " + (apiResponse ? apiResponse.message : "알 수 없는 오류"));
@@ -383,7 +385,7 @@ function showResultStep(data) {
 /* ==========================================================================
    Reset / Measure Again Action
    ========================================================================== */
-resetBtn.addEventListener('click', () => {
+function resetFormAndGoIntro() {
   stressForm.reset();
   
   // Explicitly ensure BP inputs are collapsed and disabled
@@ -394,6 +396,116 @@ resetBtn.addEventListener('click', () => {
   // Clear any validation visual states
   [ageInput, heightInput, weightInput, systolicInput, diastolicInput].forEach(clearError);
   
+  // Clear share state
+  lastResult = null;
+  
   // Go back to intro
   goToStep(0);
+}
+
+// Navigation & Sharing Event Listeners (Step 3 & 4)
+const goToShareBtn = document.getElementById('go-to-share-btn');
+const backToResultsBtn = document.getElementById('back-to-results-btn');
+const resetBtnShare = document.getElementById('reset-btn-share');
+
+resetBtn.addEventListener('click', () => {
+  resetFormAndGoIntro();
+});
+
+goToShareBtn.addEventListener('click', () => {
+  goToStep(4);
+});
+
+backToResultsBtn.addEventListener('click', () => {
+  goToStep(3);
+});
+
+resetBtnShare.addEventListener('click', () => {
+  resetFormAndGoIntro();
+});
+
+/* ==========================================================================
+   Share Page Setup & Channels (Kakao, X, copy link, system share)
+   ========================================================================== */
+const webShareBtn = document.getElementById('web-share-btn');
+const shareKakao = document.getElementById('share-kakao');
+const shareTwitter = document.getElementById('share-twitter');
+const shareCopyLink = document.getElementById('share-copy-link');
+const shareToast = document.getElementById('share-toast');
+
+let toastTimeout = null;
+
+function showToast(message) {
+  shareToast.innerText = message;
+  shareToast.classList.remove('hidden');
+  
+  if (toastTimeout) clearTimeout(toastTimeout);
+  
+  toastTimeout = setTimeout(() => {
+    shareToast.classList.add('hidden');
+  }, 2500);
+}
+
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    console.error("Clipboard copy failed: ", err);
+    // Fallback using older method if navigator.clipboard fails
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+    } catch (e) {
+      alert("공유 문구가 복사되지 못했습니다. 직접 복사해주세요:\n" + text);
+    }
+    document.body.removeChild(textArea);
+  }
+}
+
+function getShareData() {
+  const shareUrl = window.location.origin + window.location.pathname;
+  const shareText = lastResult 
+    ? `[Stress Index Lab] 제 스트레스 분석 결과는 '상위 ${lastResult.top_percentile}% (${lastResult.category})' 입니다. AI 맞춤형 분석 가이드를 직접 확인해보세요!`
+    : '[Stress Index Lab] 개인 맞춤형 AI 스트레스 지수 분석기';
+  return { title: 'Stress Index Lab', text: shareText, url: shareUrl };
+}
+
+// System Web Share API Support check
+if (navigator.share) {
+  webShareBtn.addEventListener('click', async () => {
+    const shareData = getShareData();
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      console.warn("Web Share cancelled or failed:", err);
+    }
+  });
+} else {
+  // Hide system share button if unsupported
+  webShareBtn.style.display = 'none';
+}
+
+// Kakao fallback (Copy text + link)
+shareKakao.addEventListener('click', async () => {
+  const data = getShareData();
+  const fullText = `${data.text}\n측정 링크: ${data.url}`;
+  await copyToClipboard(fullText);
+  showToast("카톡 공유용 결과가 클립보드에 복사되었습니다! 💬");
+});
+
+// Twitter sharing
+shareTwitter.addEventListener('click', () => {
+  const data = getShareData();
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
+  window.open(twitterUrl, '_blank', 'noopener,noreferrer');
+});
+
+// Link copy only
+shareCopyLink.addEventListener('click', async () => {
+  const shareUrl = window.location.origin + window.location.pathname;
+  await copyToClipboard(shareUrl);
+  showToast("공유 링크가 클립보드에 복사되었습니다! 📋");
 });

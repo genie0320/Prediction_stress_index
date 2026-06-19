@@ -311,25 +311,33 @@ body {
 .wizard-container {
   padding: 0 !important; /* Let step-card handle inner paddings */
   overflow: hidden;
+  height: 590px; /* Fixed height for consistent button positions */
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .wizard-wrapper {
   display: flex;
   width: 100%;
+  height: 100%;
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .step-card {
   flex: 0 0 100%;
   width: 100%;
+  height: 100%;
   padding: 2.5rem;
   transition: opacity 0.35s ease;
+  position: relative; /* For absolute toast overlay inside card */
+  display: flex;
+  flex-direction: column;
 }
 
 .step-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  flex: 1; /* Stretch to occupy all available vertical space */
 }
 
 .step-indicator {
@@ -353,7 +361,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
   gap: 1rem;
 }
 
@@ -1165,4 +1174,69 @@ input[type="number"]:focus {
   .suggestion-section {
     grid-template-columns: 1fr;
   }
+
+  .wizard-container {
+    height: auto !important; /* Allow height to expand on mobile due to stacked fields */
+  }
+  
+  .step-card {
+    height: auto;
+    padding: 1.5rem 1.2rem;
+  }
+  
+  .step-content {
+    height: auto;
+  }
+
+  .wizard-nav {
+    margin-top: 1.5rem !important;
+    padding-top: 0.5rem;
+  }
+}
+
+/* ==========================================================================
+   Share Page Styles & Toast Notification
+   ========================================================================== */
+.share-toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(29, 29, 31, 0.95);
+  color: #FFFFFF;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+:root.light .share-toast {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #1D1D1F;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.share-toast.hidden {
+  opacity: 0;
+  transform: translate(-50%, -45%);
+}
+
+.share-channel-btn {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.share-channel-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.share-channel-btn:active {
+  transform: translateY(0);
 }
