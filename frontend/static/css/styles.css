@@ -52,7 +52,7 @@
 
 /* Apple Dark Mode Palette */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --bg-color: #161617; /* Apple premium dark background */
     --card-bg: #1D1D1F; /* Apple dark card */
     --card-border: rgba(255, 255, 255, 0.06);
@@ -83,6 +83,70 @@
     --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.15);
     --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
+}
+
+:root.dark {
+  --bg-color: #161617; /* Apple premium dark background */
+  --card-bg: #1D1D1F; /* Apple dark card */
+  --card-border: rgba(255, 255, 255, 0.06);
+  
+  --text-primary: #F5F5F7;
+  --text-secondary: #86868B;
+  --text-muted: #6E6E73;
+  
+  --primary: #0A84FF; /* Apple SF Blue for dark mode */
+  --primary-glow: rgba(10, 132, 255, 0.2);
+  --primary-hover: #359AFF;
+  --primary-active: #0070E0;
+  
+  /* Segmented Control dark mode variables */
+  --segmented-bg: #2C2C2E;
+  --segmented-thumb: #636366;
+  --segmented-text-active: #F5F5F7;
+  
+  /* Inputs & radio cards dark mode */
+  --input-bg: #1D1D1F;
+  --input-border: #424245;
+  --radio-card-bg: #1D1D1F;
+  --radio-card-border: #424245;
+  --radio-card-hover: rgba(10, 132, 255, 0.05);
+  --radio-card-checked-bg: rgba(10, 132, 255, 0.05);
+  --radio-card-checked-border: #0A84FF;
+  
+  --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+:root.light {
+  --bg-color: #F5F5F7; /* Apple signature light gray background */
+  --card-bg: #FFFFFF;
+  --card-border: rgba(0, 0, 0, 0.06);
+  
+  --text-primary: #1D1D1F; /* Apple black */
+  --text-secondary: #86868B; /* Apple gray */
+  --text-muted: #A1A1A6;
+  
+  --primary: #0071E3; /* Apple Blue */
+  --primary-glow: rgba(0, 113, 227, 0.12);
+  --primary-hover: #0077ED;
+  --primary-active: #0062C4;
+  
+  /* Segmented Control variables */
+  --segmented-bg: #EEEEF0;
+  --segmented-thumb: #FFFFFF;
+  --segmented-text-active: #1D1D1F;
+  
+  /* Inputs & radio cards */
+  --input-bg: #FFFFFF;
+  --input-border: #D2D2D7;
+  --radio-card-bg: #FFFFFF;
+  --radio-card-border: #D2D2D7;
+  --radio-card-hover: rgba(0, 113, 227, 0.04);
+  --radio-card-checked-bg: rgba(0, 113, 227, 0.04);
+  --radio-card-checked-border: #0071E3;
+  
+  --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 /* ==========================================================================
