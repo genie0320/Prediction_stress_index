@@ -77,7 +77,9 @@
                   </div>
                 </div>
               </div>
-              <button type="button" class="submit-btn next-btn" data-next="1">
+            </div>
+            <div class="wizard-nav">
+              <button type="button" class="submit-btn next-btn" data-next="1" style="width: 100%; justify-content: center;">
                 <span>스트레스 측정 시작하기</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon"><line x1="5" y1="12" x2="19" y2="12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg>
               </button>
@@ -160,10 +162,10 @@
                 </div>
               </fieldset>
 
-              <div class="wizard-nav">
-                <button type="button" class="btn-prev" data-prev="0">이전</button>
-                <button type="button" class="btn-next" data-next="2">다음 단계</button>
-              </div>
+            </div>
+            <div class="wizard-nav">
+              <button type="button" class="btn-prev" data-prev="0">이전</button>
+              <button type="button" class="btn-next" data-next="2">다음 단계</button>
             </div>
           </div>
 
@@ -251,13 +253,13 @@
                 </div>
               </fieldset>
 
-              <div class="wizard-nav">
-                <button type="button" class="btn-prev" data-prev="1">이전</button>
-                <button type="submit" class="submit-btn" id="submit-btn">
-                  <span>스트레스 측정 시작</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon"><line x1="5" y1="12" x2="19" y2="12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </button>
-              </div>
+            </div>
+            <div class="wizard-nav">
+              <button type="button" class="btn-prev" data-prev="1">이전</button>
+              <button type="submit" class="submit-btn" id="submit-btn">
+                <span>스트레스 측정 시작</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon"><line x1="5" y1="12" x2="19" y2="12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
             </div>
           </div>
 
@@ -287,37 +289,51 @@
                 <p class="result-description" id="res-description">
                   지극히 정상적이고 일상적인 스트레스 수준입니다. 적절한 휴식이 필요합니다.
                 </p>
-
-                <div class="suggestion-section">
-                  <!-- Recommended action card -->
-                  <div class="suggestion-card">
-                    <div class="card-header">
-                      <span class="icon">🧘</span>
-                      <h4>권장 행동 가이드</h4>
-                    </div>
-                    <p id="res-action">규칙적인 수면과 함께 가벼운 운동으로 피로를 해소해보세요.</p>
-                  </div>
-
-                  <!-- Recommended supplement card -->
-                  <div class="suggestion-card">
-                    <div class="card-header">
-                      <span class="icon">💊</span>
-                      <h4>도움이 되는 보조 식품</h4>
-                    </div>
-                    <p id="res-supplement">비타민 B 복합체나 홍경천 추출물</p>
-                  </div>
-                </div>
               </div>
-
-              <div class="wizard-nav">
-                <button type="button" class="btn-prev" id="reset-btn">다시 측정</button>
-                <button type="button" class="btn-next" id="go-to-share-btn">공유하기</button>
-              </div>
+            </div>
+            <div class="wizard-nav">
+              <button type="button" class="btn-prev" id="reset-btn">다시 측정</button>
+              <button type="button" class="btn-next" id="go-to-health-btn">건강정보</button>
             </div>
           </div>
 
-          <!-- 스텝 4: 결과 공유 카드 (Share Page) -->
+          <!-- 스텝 4: 맞춤 건강정보 카드 (Health Info Page) -->
           <div class="step-card" id="step-4">
+            <div class="step-content health-step-content">
+              <span class="step-indicator">HEALTH GUIDE</span>
+              <h2>맞춤 건강 가이드</h2>
+              <p class="intro-p">
+                AI 모델이 추천하는 스트레스 해소를 위한 건강 가이드 정보입니다.
+              </p>
+
+              <div class="suggestion-list" style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                <!-- Recommended action card -->
+                <div class="suggestion-card">
+                  <div class="card-header">
+                    <span class="icon">🧘</span>
+                    <h4>권장 행동 가이드</h4>
+                  </div>
+                  <p id="res-action">규칙적인 수면과 함께 가벼운 운동으로 피로를 해소해보세요.</p>
+                </div>
+
+                <!-- Recommended supplement card -->
+                <div class="suggestion-card">
+                  <div class="card-header">
+                    <span class="icon">💊</span>
+                    <h4>도움이 되는 보조 식품</h4>
+                  </div>
+                  <p id="res-supplement">비타민 B 복합체나 홍경천 추출물</p>
+                </div>
+              </div>
+            </div>
+            <div class="wizard-nav">
+              <button type="button" class="btn-prev" id="back-to-results-btn">돌아가기</button>
+              <button type="button" class="btn-next" id="go-to-share-btn">공유하기</button>
+            </div>
+          </div>
+
+          <!-- 스텝 5: 결과 공유 카드 (Share Page) -->
+          <div class="step-card" id="step-5">
             <div class="step-content share-step-content">
               <span class="step-indicator">SHARE</span>
               <h2>결과 공유하기</h2>
@@ -326,32 +342,23 @@
               </p>
               
               <div class="share-options" style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem; width: 100%;">
-                <!-- Web Share Button (Primary) -->
-                <button type="button" class="submit-btn" id="web-share-btn" style="width: 100%; justify-content: center; gap: 8px;">
-                  <span>🔗 시스템 공유하기</span>
+                <button type="button" class="confirm-btn share-channel-btn" id="share-kakao" style="background-color: #FEE500; color: #191919; border: none; padding: 14px; font-weight: 600; width: 100%; border-radius: var(--radius-md);">
+                  💬 카카오톡 공유
                 </button>
-                
-                <div class="share-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; width: 100%;">
-                  <button type="button" class="confirm-btn share-channel-btn" id="share-kakao" style="background-color: #FEE500; color: #191919; border: none; padding: 12px; font-weight: 600;">
-                    💬 카카오톡 공유
-                  </button>
-                  <button type="button" class="confirm-btn share-channel-btn" id="share-twitter" style="background-color: #000000; color: #FFFFFF; border: none; padding: 12px; font-weight: 600;">
-                    𝕏 X로 공유
-                  </button>
-                </div>
-                
-                <button type="button" class="confirm-btn" id="share-copy-link" style="padding: 12px; font-weight: 600;">
-                  📋 링크 주소 복사
+                <button type="button" class="confirm-btn share-channel-btn" id="share-twitter" style="background-color: #000000; color: #FFFFFF; border: none; padding: 14px; font-weight: 600; width: 100%; border-radius: var(--radius-md);">
+                  𝕏 X로 공유
+                </button>
+                <button type="button" class="confirm-btn" id="share-copy-link" style="padding: 14px; font-weight: 600; width: 100%; border-radius: var(--radius-md);">
+                  📋 링크 복사 (저장)
                 </button>
               </div>
 
               <!-- Toast notification inside the card -->
               <div id="share-toast" class="share-toast hidden">공유 메시지와 링크가 복사되었습니다!</div>
-
-              <div class="wizard-nav">
-                <button type="button" class="btn-prev" id="back-to-results-btn">돌아가기</button>
-                <button type="button" class="btn-next" id="reset-btn-share">다시 측정</button>
-              </div>
+            </div>
+            <div class="wizard-nav">
+              <button type="button" class="btn-prev" id="back-to-health-btn">돌아가기</button>
+              <button type="button" class="btn-next" id="reset-btn-share">다시 측정</button>
             </div>
           </div>
 

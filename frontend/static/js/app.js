@@ -403,16 +403,18 @@ function resetFormAndGoIntro() {
   goToStep(0);
 }
 
-// Navigation & Sharing Event Listeners (Step 3 & 4)
+// Navigation & Sharing Event Listeners (Step 3, 4 & 5)
+const goToHealthBtn = document.getElementById('go-to-health-btn');
 const goToShareBtn = document.getElementById('go-to-share-btn');
 const backToResultsBtn = document.getElementById('back-to-results-btn');
+const backToHealthBtn = document.getElementById('back-to-health-btn');
 const resetBtnShare = document.getElementById('reset-btn-share');
 
 resetBtn.addEventListener('click', () => {
   resetFormAndGoIntro();
 });
 
-goToShareBtn.addEventListener('click', () => {
+goToHealthBtn.addEventListener('click', () => {
   goToStep(4);
 });
 
@@ -420,14 +422,21 @@ backToResultsBtn.addEventListener('click', () => {
   goToStep(3);
 });
 
+goToShareBtn.addEventListener('click', () => {
+  goToStep(5);
+});
+
+backToHealthBtn.addEventListener('click', () => {
+  goToStep(4);
+});
+
 resetBtnShare.addEventListener('click', () => {
   resetFormAndGoIntro();
 });
 
 /* ==========================================================================
-   Share Page Setup & Channels (Kakao, X, copy link, system share)
+   Share Page Setup & Channels (Kakao, X, copy link)
    ========================================================================== */
-const webShareBtn = document.getElementById('web-share-btn');
 const shareKakao = document.getElementById('share-kakao');
 const shareTwitter = document.getElementById('share-twitter');
 const shareCopyLink = document.getElementById('share-copy-link');
@@ -471,21 +480,6 @@ function getShareData() {
     ? `[Stress Index Lab] 제 스트레스 분석 결과는 '상위 ${lastResult.top_percentile}% (${lastResult.category})' 입니다. AI 맞춤형 분석 가이드를 직접 확인해보세요!`
     : '[Stress Index Lab] 개인 맞춤형 AI 스트레스 지수 분석기';
   return { title: 'Stress Index Lab', text: shareText, url: shareUrl };
-}
-
-// System Web Share API Support check
-if (navigator.share) {
-  webShareBtn.addEventListener('click', async () => {
-    const shareData = getShareData();
-    try {
-      await navigator.share(shareData);
-    } catch (err) {
-      console.warn("Web Share cancelled or failed:", err);
-    }
-  });
-} else {
-  // Hide system share button if unsupported
-  webShareBtn.style.display = 'none';
 }
 
 // Kakao fallback (Copy text + link)

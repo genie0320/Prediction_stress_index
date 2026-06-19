@@ -326,11 +326,12 @@ body {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  padding: 2.5rem;
+  padding: 0;
   transition: opacity 0.35s ease;
   position: relative; /* For absolute toast overlay inside card */
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .step-content {
@@ -338,6 +339,9 @@ body {
   flex-direction: column;
   gap: 1.5rem;
   flex: 1; /* Stretch to occupy all available vertical space */
+  overflow-y: auto; /* Enable scroll if content overflows */
+  padding: 2.5rem 2.5rem 1rem 2.5rem; /* Padding for scrollable content */
+  -webkit-overflow-scrolling: touch;
 }
 
 .step-indicator {
@@ -362,8 +366,11 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
-  padding-top: 1.5rem;
-  gap: 1rem;
+  padding: 1rem 2.5rem 2.5rem 2.5rem; /* Padding for fixed buttons */
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--card-border);
+  z-index: 10;
+  flex-shrink: 0;
 }
 
 /* Align single next button (like Intro) to the right */
